@@ -1,0 +1,25 @@
+{
+  "_doc": "Cac preset augmentation. Moi khoi co 'p' = xac suat ap dung. Chon preset bang --preset.",
+  "light": {
+    "affine": {"p": 1.0, "rotate": [-6, 6], "scale": [0.95, 1.05], "aspect_jitter": [0.95, 1.05], "shear": [-8, 8], "shift": [-1.5, 1.5]},
+    "thickness": {"p": 0.3, "strength": [0.2, 0.6]},
+    "noise": {"p": 0.2, "std": [0.02, 0.05], "density": 0.3}
+  },
+  "medium": {
+    "affine": {"p": 1.0, "rotate": [-10, 10], "scale": [0.9, 1.1], "aspect_jitter": [0.92, 1.08], "shear": [-12, 12], "shift": [-2, 2]},
+    "elastic": {"p": 0.3, "alpha": 3.0, "sigma": 3.0},
+    "thickness": {"p": 0.4, "strength": [0.3, 0.8]},
+    "gamma": {"p": 0.3, "range": [0.8, 1.25]},
+    "blur": {"p": 0.25, "sigma": [0.3, 0.7]},
+    "noise": {"p": 0.3, "std": [0.02, 0.08], "density": 0.3}
+  },
+  "strong": {
+    "affine": {"p": 1.0, "rotate": [-15, 15], "scale": [0.85, 1.15], "aspect_jitter": [0.88, 1.12], "shear": [-18, 18], "shift": [-3, 3]},
+    "elastic": {"p": 0.5, "alpha": 4.0, "sigma": 3.0},
+    "thickness": {"p": 0.5, "strength": [0.3, 1.0]},
+    "gamma": {"p": 0.4, "range": [0.7, 1.4]},
+    "blur": {"p": 0.35, "sigma": [0.3, 0.9]},
+    "noise": {"p": 0.4, "std": [0.03, 0.1], "density": 0.35},
+    "cutout": {"p": 0.15, "size": [2, 4]}
+  }
+}
