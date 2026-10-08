@@ -46,7 +46,7 @@ def main():
     ap.add_argument("--mode", choices=["numbers", "digits"], required=True)
     ap.add_argument("--samples", default=os.path.join(HERE, "samples"))
     ap.add_argument("--layout", choices=["aspect", "stretch"], default="aspect")
-    ap.add_argument("--box", type=float, default=22.0)
+    ap.add_argument("--box", type=float, default=20.0)
     ap.add_argument("--val-writers", default="", help="danh sach writer cho tap val, cach nhau dau phay")
     ap.add_argument("--out-dir", default=DEFAULT_OUT_DIR)
     a = ap.parse_args()

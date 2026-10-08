@@ -1,0 +1,10 @@
+{
+    "model.hidden": {"choice": [[256], [512, 256], [1024, 512], [1024, 512, 256], [512, 512, 256]]},
+    "model.dropout": {"uniform": [0.1, 0.6]},
+    "model.batchnorm": {"choice": [true, false]},
+    "model.activation": {"choice": ["gelu", "silu", "relu"]},
+    "train.lr": {"loguniform": [1e-4, 5e-3]},
+    "train.weight_decay": {"loguniform": [1e-5, 1e-1]},
+    "train.batch_size": {"choice": [32, 64, 128, 256]},
+    "train.label_smoothing": {"choice": [0.0, 0.05, 0.1]}
+}

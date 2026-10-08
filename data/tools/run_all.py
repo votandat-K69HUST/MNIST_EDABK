@@ -11,7 +11,7 @@ import subprocess
 import sys
 
 DATA = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-METHODS = ["01_mnist_random_concat", "02_mnist_style_matched", "03_qmnist_same_writer", "04_ligature_strokes"]
+METHODS = ["01_mnist_random_concat", "03_qmnist_same_writer"]
 
 
 def main():

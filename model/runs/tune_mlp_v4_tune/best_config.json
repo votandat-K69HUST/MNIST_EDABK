@@ -1,0 +1,78 @@
+{
+  "name": "mlp_v4_tune",
+  "seed": 0,
+  "num_threads": 8,
+  "data": {
+    "train": [
+      {
+        "path": "../data/_archive_v1/output/m04_ligature_strokes/train.npz",
+        "weight": 1.0
+      },
+      {
+        "path": "../data/output/m01_mnist_random_concat/train.npz",
+        "weight": 0.2
+      },
+      {
+        "path": "../data/output/m03_qmnist_same_writer/train.npz",
+        "weight": 1.0
+      },
+      {
+        "path": "../data/output/self_numbers_train.npz",
+        "weight": 0.5
+      }
+    ],
+    "total_train": 0,
+    "val": {
+      "real": [
+        "../data/output/self_numbers_val.npz"
+      ]
+    }
+  },
+  "augment": {
+    "enabled": true,
+    "rotate": 8,
+    "shear": 10,
+    "shift": 3,
+    "noise_std": 0.05,
+    "thickness_p": 0.5
+  },
+  "model": {
+    "hidden": [
+      512,
+      512,
+      256
+    ],
+    "dropout": 0.36708230560143773,
+    "activation": "gelu",
+    "batchnorm": true,
+    "input_dropout": 0.0
+  },
+  "train": {
+    "epochs": 12,
+    "batch_size": 128,
+    "optimizer": "adamw",
+    "lr": 0.001259819712204475,
+    "weight_decay": 1.786676934190881e-05,
+    "scheduler": "cosine",
+    "warmup_epochs": 1,
+    "min_lr_frac": 0.01,
+    "label_smoothing": 0.0,
+    "grad_clip": 1.0,
+    "patience": 4
+  },
+  "ensemble": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "predict": {
+    "test_csv": "../test.csv",
+    "output": "../output.csv",
+    "tta_shifts": 2
+  },
+  "base_dir": "D:\\2025\\2025.2\\LAB\\AI_ML\\Week_11\\AI_HACKATHON\\v4"
+}

@@ -12,10 +12,10 @@ Mỗi **người viết dùng một `--writer` riêng** (chia train/val theo ng�
 
 ## Bước 2 – Chuyển thành npz (`build_dataset.py`)
 ```bash
-python build_dataset.py --mode numbers --layout aspect --box 22 --val-writers ban_a   # -> output/self_numbers{,_train,_val}.npz
+python build_dataset.py --mode numbers --layout aspect --box 20 --val-writers ban_a   # -> output/self_numbers{,_train,_val}.npz
 python build_dataset.py --mode digits                                                  # -> output/self_digits.npz
 ```
-`layout` (aspect/stretch) nên khớp bố cục bạn chọn cho dữ liệu tổng hợp (xem README gốc). Chữ rời được chuẩn hoá kiểu MNIST (khung 20×20, căn trọng tâm).
+`layout aspect --box 20` = quy ước MNIST giống dữ liệu tổng hợp (giữ tỉ lệ, vừa khung 20×20, căn trọng tâm); `stretch` chỉ để thử. Chữ rời cũng được chuẩn hoá kiểu MNIST.
 
 ## Bước 3 – (tuỳ chọn) Sinh dữ liệu cùng-writer từ chữ số tự viết
 ```bash

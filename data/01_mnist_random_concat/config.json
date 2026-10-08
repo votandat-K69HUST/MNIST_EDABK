@@ -1,6 +1,6 @@
 {
   "name": "m01_mnist_random_concat",
-  "description": "Ghep ngau nhien 2 chu so MNIST (khong ep dong nhat phong cach), ngau nhien khoang cach/chong lan",
+  "description": "Ghep ngau nhien 2 chu so MNIST (hai chu khong dong nhat phong cach)",
   "seed": 0,
   "n_train": 55000,
   "n_val": 5500,
@@ -18,63 +18,16 @@
   },
   "compose": {
     "hr": 4,
-    "size_common_std": 0.05,
     "size_ratio_std": 0.12,
-    "shear_common_std": 4.0,
     "shear_individual_std": 8.0,
     "gap": [
-      -0.15,
-      0.05
+      -0.05,
+      0.35
     ],
-    "baseline_std": 0.04,
-    "thickness_hr": {
-      "values": [
-        -1,
-        0,
-        1,
-        2
-      ],
-      "probs": [
-        0.2,
-        0.4,
-        0.3,
-        0.1
-      ]
-    },
-    "ligature": {
-      "prob": 0.0
-    }
+    "baseline_std": 0.04
   },
-  "layouts": {
-    "aspect": {
-      "weight": 1.0,
-      "box": [
-        19.5,
-        21.5
-      ],
-      "squeeze": [
-        0.8,
-        1.0
-      ],
-      "center": "com",
-      "subpixel": true,
-      "shift": 0
-    }
-  },
-  "post": {
-    "gamma": [
-      1.0,
-      1.0
-    ],
-    "blur_sigma": [
-      0.0,
-      0.0
-    ],
-    "noise_std": 0.0,
-    "contrast": [
-      1.5,
-      2.0
-    ]
-  },
-  "layout_note": "Khop thong ke tong hop cua test.csv (bbox<=20, COM=13.5, ink, mid-gray) - xem README muc Bo cuc"
+  "layout": {
+    "box": 20,
+    "center": "com"
+  }
 }

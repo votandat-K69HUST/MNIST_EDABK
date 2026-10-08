@@ -1,0 +1,21 @@
+xong -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\data\raw
+[m01_mnist_random_concat] train: 55000 anh -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\data\output\m01_mnist_random_concat
+[m01_mnist_random_concat] val: 5500 anh -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\data\output\m01_mnist_random_concat
+xong trong 86.4s
+[m02_mnist_style_matched] train: 55000 anh -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\data\output\m02_mnist_style_matched
+[m02_mnist_style_matched] val: 5500 anh -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\data\output\m02_mnist_style_matched
+xong trong 85.0s
+[m03_qmnist_same_writer] train: 55000 anh -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\data\output\m03_qmnist_same_writer
+[m03_qmnist_same_writer] val: 5500 anh -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\data\output\m03_qmnist_same_writer
+xong trong 80.0s
+[m04_ligature_strokes] train: 55000 anh -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\data\output\m04_ligature_strokes
+[m04_ligature_strokes] val: 5500 anh -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\data\output\m04_ligature_strokes
+xong trong 103.4s
+
+===  01_mnist_random_concat
+
+===  02_mnist_style_matched
+
+===  03_qmnist_same_writer
+
+===  04_ligature_strokes

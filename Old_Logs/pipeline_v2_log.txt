@@ -1,0 +1,76 @@
+
+$ C:\Users\ADMIN\miniconda3\python.exe train.py --config D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\model\config.json
+[seed 0] train 110000 mau tu ['m01_mnist_random_concat/train.npz:55000', 'm03_qmnist_same_writer/train.npz:55000']; val: ['synthetic:m01_mnist_random_concat/val.npz', 'synthetic:m03_qmnist_same_writer/val.npz']
+  ep   1 loss 0.9780 score 0.9324 syn.m01=0.922 syn.m03=0.943 (12s)
+  ep   2 loss 0.5446 score 0.9579 syn.m01=0.951 syn.m03=0.964 (25s)
+  ep   3 loss 0.4775 score 0.9670 syn.m01=0.964 syn.m03=0.970 (35s)
+  ep   4 loss 0.4455 score 0.9708 syn.m01=0.968 syn.m03=0.973 (45s)
+  ep   5 loss 0.4247 score 0.9711 syn.m01=0.969 syn.m03=0.974 (57s)
+  ep   6 loss 0.4089 score 0.9757 syn.m01=0.974 syn.m03=0.978 (63s)
+  ep   7 loss 0.3969 score 0.9770 syn.m01=0.975 syn.m03=0.979 (66s)
+  ep   8 loss 0.3872 score 0.9783 syn.m01=0.976 syn.m03=0.981 (69s)
+  ep   9 loss 0.3794 score 0.9795 syn.m01=0.978 syn.m03=0.981 (72s)
+  ep  10 loss 0.3707 score 0.9783 syn.m01=0.976 syn.m03=0.980 (75s)
+  ep  11 loss 0.3648 score 0.9796 syn.m01=0.979 syn.m03=0.981 (78s)
+  ep  12 loss 0.3588 score 0.9806 syn.m01=0.980 syn.m03=0.981 (81s)
+  ep  13 loss 0.3547 score 0.9799 syn.m01=0.980 syn.m03=0.980 (84s)
+  ep  14 loss 0.3504 score 0.9825 syn.m01=0.981 syn.m03=0.984 (87s)
+  ep  15 loss 0.3468 score 0.9818 syn.m01=0.981 syn.m03=0.983 (91s)
+  ep  16 loss 0.3440 score 0.9809 syn.m01=0.979 syn.m03=0.983 (100s)
+  ep  17 loss 0.3421 score 0.9808 syn.m01=0.980 syn.m03=0.982 (109s)
+  ep  18 loss 0.3408 score 0.9812 syn.m01=0.980 syn.m03=0.983 (119s)
+  ep  19 loss 0.3394 score 0.9808 syn.m01=0.979 syn.m03=0.982 (128s)
+  ep  20 loss 0.3389 score 0.9818 syn.m01=0.981 syn.m03=0.983 (131s)
+  early stop (khong cai thien 6 epoch)
+[seed 0] best epoch 14, score 0.9825, params 537,611 -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\model\runs\mlp_v2_simple\model_seed0.pt
+[seed 1] train 110000 mau tu ['m01_mnist_random_concat/train.npz:55000', 'm03_qmnist_same_writer/train.npz:55000']; val: ['synthetic:m01_mnist_random_concat/val.npz', 'synthetic:m03_qmnist_same_writer/val.npz']
+  ep   1 loss 1.0007 score 0.9351 syn.m01=0.924 syn.m03=0.946 (4s)
+  ep   2 loss 0.5443 score 0.9577 syn.m01=0.952 syn.m03=0.963 (7s)
+  ep   3 loss 0.4771 score 0.9654 syn.m01=0.964 syn.m03=0.967 (11s)
+  ep   4 loss 0.4469 score 0.9696 syn.m01=0.965 syn.m03=0.974 (14s)
+  ep   5 loss 0.4251 score 0.9712 syn.m01=0.968 syn.m03=0.975 (18s)
+  ep   6 loss 0.4086 score 0.9756 syn.m01=0.973 syn.m03=0.978 (21s)
+  ep   7 loss 0.3972 score 0.9752 syn.m01=0.972 syn.m03=0.978 (25s)
+  ep   8 loss 0.3876 score 0.9773 syn.m01=0.975 syn.m03=0.980 (28s)
+  ep   9 loss 0.3787 score 0.9768 syn.m01=0.975 syn.m03=0.979 (32s)
+  ep  10 loss 0.3713 score 0.9787 syn.m01=0.977 syn.m03=0.980 (35s)
+  ep  11 loss 0.3652 score 0.9788 syn.m01=0.977 syn.m03=0.981 (39s)
+  ep  12 loss 0.3595 score 0.9794 syn.m01=0.977 syn.m03=0.982 (42s)
+  ep  13 loss 0.3543 score 0.9803 syn.m01=0.979 syn.m03=0.981 (45s)
+  ep  14 loss 0.3507 score 0.9802 syn.m01=0.979 syn.m03=0.981 (49s)
+  ep  15 loss 0.3471 score 0.9815 syn.m01=0.980 syn.m03=0.983 (52s)
+  ep  16 loss 0.3446 score 0.9814 syn.m01=0.980 syn.m03=0.983 (55s)
+  ep  17 loss 0.3420 score 0.9809 syn.m01=0.979 syn.m03=0.983 (59s)
+  ep  18 loss 0.3406 score 0.9805 syn.m01=0.979 syn.m03=0.982 (62s)
+  ep  19 loss 0.3399 score 0.9815 syn.m01=0.980 syn.m03=0.983 (66s)
+  ep  20 loss 0.3395 score 0.9811 syn.m01=0.980 syn.m03=0.982 (70s)
+[seed 1] best epoch 15, score 0.9815, params 537,611 -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\model\runs\mlp_v2_simple\model_seed1.pt
+[seed 2] train 110000 mau tu ['m01_mnist_random_concat/train.npz:55000', 'm03_qmnist_same_writer/train.npz:55000']; val: ['synthetic:m01_mnist_random_concat/val.npz', 'synthetic:m03_qmnist_same_writer/val.npz']
+  ep   1 loss 0.9971 score 0.9334 syn.m01=0.922 syn.m03=0.945 (4s)
+  ep   2 loss 0.5453 score 0.9573 syn.m01=0.951 syn.m03=0.963 (7s)
+  ep   3 loss 0.4783 score 0.9660 syn.m01=0.963 syn.m03=0.969 (11s)
+  ep   4 loss 0.4470 score 0.9706 syn.m01=0.966 syn.m03=0.975 (14s)
+  ep   5 loss 0.4245 score 0.9715 syn.m01=0.967 syn.m03=0.976 (18s)
+  ep   6 loss 0.4097 score 0.9741 syn.m01=0.973 syn.m03=0.976 (21s)
+  ep   7 loss 0.3983 score 0.9768 syn.m01=0.972 syn.m03=0.981 (25s)
+  ep   8 loss 0.3874 score 0.9785 syn.m01=0.977 syn.m03=0.980 (28s)
+  ep   9 loss 0.3784 score 0.9772 syn.m01=0.974 syn.m03=0.981 (32s)
+  ep  10 loss 0.3722 score 0.9794 syn.m01=0.978 syn.m03=0.981 (37s)
+  ep  11 loss 0.3657 score 0.9804 syn.m01=0.979 syn.m03=0.982 (51s)
+  ep  12 loss 0.3585 score 0.9801 syn.m01=0.979 syn.m03=0.981 (65s)
+  ep  13 loss 0.3545 score 0.9811 syn.m01=0.979 syn.m03=0.983 (78s)
+  ep  14 loss 0.3513 score 0.9807 syn.m01=0.978 syn.m03=0.983 (91s)
+  ep  15 loss 0.3471 score 0.9822 syn.m01=0.981 syn.m03=0.984 (104s)
+  ep  16 loss 0.3441 score 0.9817 syn.m01=0.980 syn.m03=0.984 (116s)
+  ep  17 loss 0.3427 score 0.9815 syn.m01=0.979 syn.m03=0.983 (129s)
+  ep  18 loss 0.3407 score 0.9825 syn.m01=0.980 syn.m03=0.985 (142s)
+  ep  19 loss 0.3397 score 0.9820 syn.m01=0.980 syn.m03=0.984 (154s)
+  ep  20 loss 0.3391 score 0.9823 syn.m01=0.981 syn.m03=0.984 (164s)
+[seed 2] best epoch 18, score 0.9825, params 537,611 -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\model\runs\mlp_v2_simple\model_seed2.pt
+diem trung binh cac seed: 0.9821515151515152
+ket qua o D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\model\runs\mlp_v2_simple
+
+$ C:\Users\ADMIN\miniconda3\python.exe predict.py --config D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\model\config.json
+3 model, TTA=0; 550 dong -> D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\output.csv
+phan bo nhan du doan (ky vong ~50 moi lop): {10: 56, 11: 50, 12: 48, 13: 52, 14: 50, 15: 54, 16: 43, 17: 56, 18: 51, 19: 45, 20: 45}
+do tin cay trung binh 0.832; ty le mau < 0.6: 0.125

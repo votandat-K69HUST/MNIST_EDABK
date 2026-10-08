@@ -4,7 +4,7 @@ Chay:  python generate.py [--config config.json] [--n-train N] [--n-val N] [--se
 
 Dau ra (out/<name>/):
     train.npz, val.npz : X uint8 (N,28,28), y (N,) in 10..20, va metadata (src_left, src_right, writer,
-                         gap, thick, lig, layout) de phan tich loi
+                         gap) de phan tich loi
     config_used.json   : config da dung (de tai tao)
 Tai tao: cung config + cung seed + cung du lieu goc => cung ket qua (khong phu thuoc so workers).
 """
@@ -18,10 +18,8 @@ import numpy as np
 
 from . import io_utils
 from .compose import compose_uint8
-from .features import style_features_batch
 from .pairing import sample_pair, split_pools
 
-LAYOUT_IDS = {"aspect": 0, "stretch": 1}
 CHUNK = 1000
 _STATE = {}
 
@@ -33,30 +31,12 @@ def load_config(path):
     return cfg
 
 
-def _features_for(cfg, source):
-    kind = cfg["source"]["kind"]
-    raw_dir = cfg["source"].get("raw_dir", io_utils.DEFAULT_RAW_DIR)
-    cache = os.path.join(raw_dir, f"features_{kind}.npy")
-    if os.path.exists(cache):
-        f = np.load(cache)
-        if len(f) == len(source["digit"]):
-            return f
-    print(f"[features] tinh dac trung phong cach cho {len(source['digit'])} anh ({kind}) ...")
-    f = style_features_batch(source["X"])
-    # chuan hoa z-score de cac chieu co thang do ngang nhau
-    f = (f - f.mean(0)) / (f.std(0) + 1e-9)
-    os.makedirs(raw_dir, exist_ok=True)
-    np.save(cache, f)
-    return f
-
-
 def _build_state(cfg):
     scfg = cfg["source"]
     source = io_utils.load_source(scfg["kind"], scfg.get("raw_dir", io_utils.DEFAULT_RAW_DIR),
                                   scfg.get("self_path"))
-    feats = _features_for(cfg, source) if cfg["pairing"].get("mode") == "style_matched" else None
     sp = cfg.get("split", {})
-    train_pool, val_pool = split_pools(source, sp.get("val_fraction", 0.1), sp.get("split_seed", 123), feats)
+    train_pool, val_pool = split_pools(source, sp.get("val_fraction", 0.1), sp.get("split_seed", 123))
     return {"cfg": cfg, "source": source, "pools": {"train": train_pool, "val": val_pool}}
 
 
@@ -72,14 +52,13 @@ def _gen_chunk(args):
     X = np.zeros((n, 28, 28), dtype=np.uint8)
     meta = {k: np.zeros(n, dtype=dt) for k, dt in
             [("src_left", np.int64), ("src_right", np.int64), ("writer", np.int64),
-             ("gap", np.float32), ("thick", np.int8), ("lig", np.int8), ("layout", np.int8)]}
+             ("gap", np.float32)]}
     for i, lab in enumerate(labels):
         il, ir = sample_pair(pool, int(lab), rng, cfg["pairing"])
         X[i], info = compose_uint8(source["X"][il], source["X"][ir], rng, cfg)
         meta["src_left"][i], meta["src_right"][i] = il, ir
         meta["writer"][i] = source["writer"][il]
-        meta["gap"][i], meta["thick"][i] = info["gap"], info["thick"]
-        meta["lig"][i], meta["layout"][i] = info["lig"], LAYOUT_IDS[info["layout"]]
+        meta["gap"][i] = info["gap"]
     return X, labels, meta
 
 

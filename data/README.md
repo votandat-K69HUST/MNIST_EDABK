@@ -1,71 +1,54 @@
-# data/ – Xây dựng và tái tạo dữ liệu train cho MNIST 10–20
+# data/ – Sinh dữ liệu train cho MNIST 10–20 (bản tối giản v2)
 
-Mục tiêu: sinh ảnh 28×28 xám chứa số 10–20 (11 class) từ các cách khác nhau, **tái tạo được hoàn toàn** từ config + seed.
-Ràng buộc của đội: chỉ dùng MLP (xem `../the_le.md`). Tổng hợp nghiên cứu: `../tong_hop_phuong_phap_data.md`.
+Sinh ảnh 28×28 xám chứa số 10–20 (11 lớp) bằng cách **ghép hai chữ số MNIST/QMNIST**, tái tạo hoàn toàn từ config + seed.
+Chỉ dùng MLP (xem `../the_le.md`). Bản v1 phức tạp hơn (nét nối, dày/mỏng nét, độ tương phản, ghép theo phong cách, nhiều bố cục, augmentation offline) được **cất trong `_archive_v1/`**, không xoá.
 
-## Cài đặt & chạy nhanh
+## Chạy
 ```bash
-pip install -r requirements.txt            # numpy, scipy, pillow (pandas cho stats)
-python tools/download_data.py              # tải MNIST + QMNIST vào raw/ (~100MB)
-python tools/run_all.py --n-train 11000 --n-val 1100 --workers 4   # thử nhanh tất cả phương pháp
-python tools/run_all.py                    # kích thước mặc định (55.000 train + 5.500 val mỗi phương pháp)
-python tools/preview.py output/m04_ligature_strokes/train.npz      # xem lưới ảnh TỰ SINH (không dùng cho test!)
+pip install -r requirements.txt
+python tools/download_data.py          # tải MNIST + QMNIST vào raw/
+python tools/run_all.py                # sinh m01 + m03 (55.000 train + 5.500 val mỗi bộ) -> output/
+python tools/preview.py output/m03_qmnist_same_writer/train.npz   # xem lưới ảnh TỰ SINH
 ```
-Đã kiểm thử với Python 3.14, numpy 2.5, scipy 1.18, Pillow 12 trên Windows.
+Từng bộ: `cd 01_mnist_random_concat && python generate.py [--n-train N --n-val N --seed S --workers W]`.
 
-## Các phương pháp
+## Hai phương pháp
 | Thư mục | Ý tưởng | Nguồn | Chia train/val |
 |---|---|---|---|
-| `01_mnist_random_concat` | Ghép ngẫu nhiên 2 chữ số MNIST (baseline) | MNIST | theo ảnh |
-| `02_mnist_style_matched` | Ghép 2 chữ **có phong cách gần nhau** (độ nghiêng, độ dày nét, tỉ lệ) | MNIST | theo ảnh |
-| `03_qmnist_same_writer` | Ghép 2 chữ **cùng một người viết** | QMNIST (1074 writer) | **theo writer** |
-| `04_ligature_strokes` | Cùng writer + **nét nối mờ ở giữa** hai chữ | QMNIST | theo writer |
-| `05_self_handwritten` | Công cụ **tự viết tay** (số 2 chữ số / chữ số rời) → dữ liệu thật; ghép cùng writer từ chữ số tự viết | bạn tự viết | theo người viết |
-| `06_augmentation` | Augmentation hình học/nét/nhiễu (preset light/medium/strong) offline hoặc online | npz bất kỳ | chỉ train |
+| `01_mnist_random_concat` | Hai chữ bốc ngẫu nhiên (phong cách không đồng nhất) | MNIST (70k) | theo ảnh |
+| `03_qmnist_same_writer` | Hai chữ **cùng một người viết** (ý tưởng bài MDW, arXiv 2512.00676) | QMNIST (1074 writer) | theo **writer** |
+| `05_self_handwritten` | Công cụ tự viết tay → tập val thật / chữ số của riêng bạn | bạn tự viết | theo người viết |
 
-Mỗi thư mục có `README.md` (ý tưởng, tham số), `config.json` (toàn bộ tham số), `generate.py` (chạy được ngay).
-Mã dùng chung ở `common/` (một engine duy nhất đọc config; các thư mục phương pháp chỉ khác config).
+Nhãn 10–19 = chữ "1" + chữ d; nhãn 20 = "2" + "0". Nhãn cân bằng 11 lớp.
+
+## Quy trình ghép (common/compose.py, layout.py) – chỉ những phần được giữ lại
+1. Cắt sát nét từng chữ, phóng 4× (canvas phân giải cao).
+2. **Lệch kích thước** giữa hai chữ (`compose.size_ratio_std`) và **độ nghiêng** từng chữ độc lập (`compose.shear_individual_std`, độ).
+3. Đặt cạnh nhau với **khoảng cách `gap`** (đơn vị 20 px; âm = chồng lấn/chạm) và **lệch đường cơ sở** (`baseline_std`); chữ phải đặt thẳng đáy chữ trái + lệch.
+4. **Thu nhỏ MỘT LẦN** về 28×28 theo quy ước chuẩn MNIST (`layout`): cắt sát nét, giữ tỉ lệ để vừa khung 20×20, căn giữa theo trọng tâm (`box=20`).
+
+Không còn: nét nối, đổi độ dày nét, độ tương phản/gamma/làm mờ/nhiễu, ép ngang, nhiều kiểu bố cục, ghép theo phong cách, augmentation trong khâu sinh dữ liệu.
+Các tham số giữ lại (`gap` [-0.05, 0.35], `baseline_std` 0.04, `size_ratio_std`, `shear_individual_std`: 0.12/8° cho 01 và 0.04/2° cho 03) là **giá trị tự đặt**, không có nguồn bài báo, và **không khớp với thống kê test** (v2 không dùng thông tin gì từ `test.csv`).
 
 ## Cấu trúc
 ```
 data/
-  common/       io_utils (tải/parse IDX), features (nghiêng/dày/cỡ), imgops, ligature, layout, compose,
-                pairing, engine (sinh dữ liệu theo config), augment
-  raw/          dữ liệu gốc tải về + cache đặc trưng (features_*.npy) – có thể xoá, sẽ tự tạo lại
-  output/       <tên_bộ>/{train,val}.npz + config_used.json   (có thể xoá, tái tạo bằng generate.py)
-  tools/        download_data, run_all, preview, stats, merge_datasets
-  0x_*/         các phương pháp
+  common/   io_utils (tải/parse IDX), features (cắt nét), imgops, compose, layout, pairing (random | same_writer), engine
+  raw/      dữ liệu gốc tải về (có thể xoá, tự tải lại)
+  output/   <tên>/{train,val}.npz + config_used.json
+  tools/    download_data, run_all, preview, stats, merge_datasets
+  01_*, 03_*, 05_*   cấu hình + generate.py từng phương pháp
+  _archive_v1/       bản cũ (02 style_matched, 04 ligature, 06 augmentation, ligature.py, augment.py, configs/engine/compose cũ, output cũ)
 ```
 
-## Định dạng đầu ra (`output/<tên>/train.npz`, `val.npz`)
-- `X` uint8 `(N,28,28)`, nền đen (0), nét trắng (255) — khớp kiểu MNIST; `y` int `(N,)` ∈ {10..20}.
-- Metadata để phân tích lỗi: `src_left`, `src_right` (chỉ số ảnh nguồn), `writer`, `gap`, `thick`, `lig` (0 không/1 nối/2 đuôi bút), `layout` (0 aspect, 1 stretch).
-- Đọc: `X, y = np.load(p)["X"], np.load(p)["y"]`; chuẩn hoá `X/255.0`, `reshape(N, 784)` cho MLP.
-- Nhãn cân bằng giữa 11 lớp. Nhãn 10–19 = chữ "1" + chữ d; nhãn 20 = "2" + "0".
+## Định dạng đầu ra
+`X` uint8 `(N,28,28)` nền đen, nét trắng; `y` ∈ {10..20}; metadata `src_left`, `src_right`, `writer`, `gap`. Chuẩn hoá `X/255`, reshape `(N,784)` cho MLP.
 
 ## Tái tạo
-- `config.json` + `seed` + dữ liệu gốc (MNIST/QMNIST) ⇒ kết quả giống hệt, **không phụ thuộc số workers** (đã kiểm tra).
-- Mỗi lần chạy ghi `output/<tên>/config_used.json` (đủ tham số + seed + kích thước thực dùng).
-- Đổi tham số: sửa `config.json` hoặc dùng `--n-train/--n-val/--seed/--workers/--out`.
+Cùng `config.json` + `seed` + dữ liệu gốc ⇒ kết quả giống hệt, không phụ thuộc số workers. Mỗi lần chạy ghi `output/<tên>/config_used.json`.
 
-## Quy trình đề xuất
-1. `run_all.py` → 4 bộ tổng hợp. Xem `preview.py` kiểm tra bằng mắt (chỉ dữ liệu tự sinh).
-2. Tự viết tay (05): (a) vài trăm **số 2 chữ số** từ nhiều người làm tập **validation thật**; (b) chữ số rời của bạn/bạn bè → sinh thêm bộ `m05_self_same_writer`.
-3. `tools/merge_datasets.py` trộn các nguồn theo trọng số → `final_train.npz`; augmentation (06) chỉ cho train.
-4. Chọn mô hình theo val **thật** (tự viết); không chạy theo public LB.
+## Hướng phát triển (để bạn tự thêm từng bước và đo trên val thật)
+Bản v1 trong `_archive_v1/` có sẵn code tham khảo cho: nét nối (`common/ligature.py`), ghép theo phong cách (`features_v1.py`, `pairing_v1.py`), nhiều bố cục (`layout_v1.py`), dày/mỏng nét + tương phản (`compose_v1.py`), augmentation (`augment.py`, `06_augmentation/`). Nên thêm từng thành phần một và đo trên **tập chữ viết tay thật** (`05_self_handwritten`).
 
-## ⚠ Điểm chưa chắc chắn – cần xử lý
-1. **Bố cục ảnh test — ĐÃ ĐỐI CHIẾU bằng thống kê tổng hợp (`tools/stats.py test.csv`, không xem ảnh):**
-   - Chiều lớn nhất của vùng chữ gần như luôn ≤ 20 px (≥20 ở 55% ảnh, hầu như không có >21), rộng và cao đều bị chặn ở 20 → **giữ tỉ lệ, vừa khung 20×20** kiểu MNIST.
-   - Trọng tâm ảnh nằm đúng (13.5, 13.5) với độ lệch chuẩn ≈ 0.03–0.09 → **căn giữa theo trọng tâm, độ chính xác dưới pixel**.
-   - Tỉ lệ rộng/cao trung bình 1.05; 43% ảnh cao hơn rộng; tương quan rộng–cao = −0.38 (số hai chữ số khá "gọn", không phải dải ngang dài).
-   - Ít pixel xám trung gian (11% so với ~20% khi mặc định) → ảnh **sắc nét** (đã thêm `post.contrast`).
-   - Cấu hình hiện tại trong 5 `config.json` (`layouts.aspect` box 19.5–21.5, `squeeze` 0.8–1.0, `subpixel`, `post.contrast` 1.5–2, `compose.gap` −0.15…0.05, `thickness_hr`) cho thống kê khớp test: mean pixel 36.5 vs 38.7, tỉ lệ mực 0.143 vs 0.153, bbox cao/rộng 16.9/17.2 vs 17.1/17.2, aspect 1.075 vs 1.053, mid-gray 0.115 vs 0.114.
-   - Còn lệch nhẹ: độ lệch chuẩn trọng tâm của dữ liệu tự sinh ~0.09 (test ~0.03); ảnh test có thể hơi đậm hơn (mean pixel).
-   - Thống kê tổng hợp không cho biết **có nét nối hay không**, nên `ligature.prob` vẫn là ước đoán.
-2. **Tần suất nét nối thật** không có số liệu trong tài liệu đã tra; `ligature.prob = 0.3` chỉ là giá trị khởi điểm. Hãy chỉnh theo cách bạn thật sự viết.
-3. QMNIST là dữ liệu bên ngoài (NIST/MNIST gốc). Đề không cấm dữ liệu ngoài nhưng yêu cầu đội "tự xây dựng" dữ liệu – nên hỏi ban tổ chức nếu muốn chắc; phương án 05 (tự viết) không có rủi ro này.
-4. Chưa có `test.csv` để đối chiếu nên chưa so được phân phối.
-
-## Tuân thủ luật cuộc thi
-- Không dùng `test.csv` để train / gán nhãn / xem ảnh. `tools/stats.py` chỉ in thống kê tổng hợp; `tools/preview.py` chỉ dùng cho `.npz` tự sinh.
+## Tuân thủ luật
+Không dùng `test.csv` để train/gán nhãn/xem ảnh. `tools/stats.py` (thống kê tổng hợp) vẫn còn nhưng v2 **không** dùng nó để chỉnh dữ liệu.
