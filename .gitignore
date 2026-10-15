@@ -1,0 +1,48 @@
+# ==============================================================================
+# Git Ignore Configuration for AI Hackathon - Handwritten Number Recognition
+# ==============================================================================
+
+# 1. Python bytecode & cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# 2. Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# 3. Raw downloaded datasets (can be auto-downloaded via data/tools/download_data.py)
+data/raw/mnist/
+data/raw/qmnist/
+data/raw/*.gz
+data/raw/*.idx*
+data/raw/features_mnist.npy
+
+# 4. Jupyter Notebook & IDE configs
+.ipynb_checkpoints/
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# 5. OS temporary & metadata files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# 6. Temporary logs and backups
+*.tmp
+*.bak
+*.swp
+*.swo
