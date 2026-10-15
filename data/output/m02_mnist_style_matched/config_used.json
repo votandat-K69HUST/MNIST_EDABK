@@ -1,0 +1,87 @@
+{
+  "name": "m02_mnist_style_matched",
+  "description": "Ghep 2 chu so MNIST co phong cach gan nhau (nghieng, day net, ti le); lech nho giua 2 chu",
+  "seed": 0,
+  "n_train": 55000,
+  "n_val": 5500,
+  "workers": 4,
+  "source": {
+    "kind": "mnist",
+    "raw_dir": "D:\\2025\\2025.2\\LAB\\AI_ML\\Week_11\\AI_HACKATHON\\data\\raw"
+  },
+  "split": {
+    "val_fraction": 0.1,
+    "split_seed": 123
+  },
+  "pairing": {
+    "mode": "style_matched",
+    "candidates": 24,
+    "temperature": 0.3,
+    "feature_weights": [
+      1.0,
+      1.0,
+      0.5
+    ]
+  },
+  "compose": {
+    "hr": 4,
+    "size_common_std": 0.05,
+    "size_ratio_std": 0.04,
+    "shear_common_std": 6.0,
+    "shear_individual_std": 2.0,
+    "gap": [
+      -0.15,
+      0.05
+    ],
+    "baseline_std": 0.04,
+    "thickness_hr": {
+      "values": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "probs": [
+        0.2,
+        0.4,
+        0.3,
+        0.1
+      ]
+    },
+    "ligature": {
+      "prob": 0.0
+    }
+  },
+  "layouts": {
+    "aspect": {
+      "weight": 1.0,
+      "box": [
+        19.5,
+        21.5
+      ],
+      "squeeze": [
+        0.8,
+        1.0
+      ],
+      "center": "com",
+      "subpixel": true,
+      "shift": 0
+    }
+  },
+  "post": {
+    "gamma": [
+      1.0,
+      1.0
+    ],
+    "blur_sigma": [
+      0.0,
+      0.0
+    ],
+    "noise_std": 0.0,
+    "contrast": [
+      1.5,
+      2.0
+    ]
+  },
+  "layout_note": "Khop thong ke tong hop cua test.csv (bbox<=20, COM=13.5, ink, mid-gray) - xem README muc Bo cuc"
+}

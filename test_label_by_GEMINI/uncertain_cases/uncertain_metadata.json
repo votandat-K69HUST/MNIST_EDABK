@@ -1,0 +1,179 @@
+[
+  {
+    "id": 8,
+    "llm_pred": 14,
+    "candidates": [
+      14,
+      17
+    ],
+    "note": "Chữ số 4 có nét gạch ngang xuyên qua (kiểu châu Âu), một số model bị nhầm sang 17."
+  },
+  {
+    "id": 10,
+    "llm_pred": 10,
+    "candidates": [
+      10,
+      20
+    ],
+    "note": "Chữ số 1 có mũ móc phía trên và đế gạch ngang ở chân, mô hình MLP nhầm chân đế là số 2 (đoán 20), nhưng mắt nhìn rõ là số 10 in/serif."
+  },
+  {
+    "id": 61,
+    "llm_pred": 19,
+    "candidates": [
+      19,
+      13
+    ],
+    "note": "Số 1 nghiêng, số 9 có vòng tròn khép kín phía trên kéo xuống thân; model v6 nhầm là 13."
+  },
+  {
+    "id": 78,
+    "llm_pred": 18,
+    "candidates": [
+      18,
+      13
+    ],
+    "note": "Chữ số bên phải có 2 vòng khép kín (số 8), model trước đây đoán 13 (97%)."
+  },
+  {
+    "id": 125,
+    "llm_pred": 19,
+    "candidates": [
+      19,
+      18
+    ],
+    "note": "Chữ số bên phải có đầu vuông, thân phải thẳng xuống, không có vòng dưới (kiểu số 9 vuông)."
+  },
+  {
+    "id": 177,
+    "llm_pred": 19,
+    "candidates": [
+      19,
+      17
+    ],
+    "note": "Chữ số bên phải có gạch ngang trên và thân móc, có thể là 17 hoặc 19 hở vòng."
+  },
+  {
+    "id": 228,
+    "llm_pred": 19,
+    "candidates": [
+      19,
+      18,
+      13
+    ],
+    "note": "Chữ số bên phải có vòng trên và nét cong dưới, tranh chấp giữa 19 và 18 (hoặc 13)."
+  },
+  {
+    "id": 234,
+    "llm_pred": 15,
+    "candidates": [
+      15,
+      10,
+      16
+    ],
+    "note": "Kích thước chữ rất nhỏ ở giữa, nét mờ và có đốm nhiễu ở góc dưới phải."
+  },
+  {
+    "id": 247,
+    "llm_pred": 16,
+    "candidates": [
+      16,
+      15
+    ],
+    "note": "Nét bên phải có vòng tròn đáy khép kín rõ ràng (số 6), mô hình MLP bị overfit đoán 15."
+  },
+  {
+    "id": 269,
+    "llm_pred": 20,
+    "candidates": [
+      20
+    ],
+    "note": "Số 2 và số 0 có gạch chéo qua (slashed zero Ø), nhìn giống 26 nhưng tập dữ liệu chỉ có 10-20 nên chắc chắn là 20."
+  },
+  {
+    "id": 279,
+    "llm_pred": 16,
+    "candidates": [
+      16,
+      15
+    ],
+    "note": "Chữ số bên phải dạng kỹ thuật số/hộp vuông có đáy khép kín (số 6 digital), mô hình đoán 15."
+  },
+  {
+    "id": 316,
+    "llm_pred": 10,
+    "candidates": [
+      10,
+      20
+    ],
+    "note": "Số bên trái dạng mũ caret ^, số bên phải là 0; có thể là số 1 cách điệu (10) hoặc đỉnh số 2 (20)."
+  },
+  {
+    "id": 321,
+    "llm_pred": 13,
+    "candidates": [
+      13,
+      19
+    ],
+    "note": "Số bên phải có vòng trên và nét cong dưới, tranh chấp giữa 13 và 19."
+  },
+  {
+    "id": 332,
+    "llm_pred": 16,
+    "candidates": [
+      16,
+      15,
+      18
+    ],
+    "note": "Chữ số bên phải có thân trên và vòng khép đáy (số 6), mô hình đoán 15 hoặc 18."
+  },
+  {
+    "id": 392,
+    "llm_pred": 11,
+    "candidates": [
+      11,
+      12,
+      20
+    ],
+    "note": "Nét viết ngang rất nguệch ngoạc nối 2 thân đứng, mô hình phân vân giữa 11, 12 và 20."
+  },
+  {
+    "id": 414,
+    "llm_pred": 11,
+    "candidates": [
+      11,
+      17,
+      20
+    ],
+    "note": "Nét bên trái giống góc vuông ¬, nét bên phải là 1; rất dị biệt."
+  },
+  {
+    "id": 476,
+    "llm_pred": 19,
+    "candidates": [
+      19,
+      13,
+      18
+    ],
+    "note": "Số bên phải có 2 đường cong, mô hình v6 đoán 13, v4/v7 đoán 19."
+  },
+  {
+    "id": 483,
+    "llm_pred": 14,
+    "candidates": [
+      14,
+      17
+    ],
+    "note": "Nét 1 nghiêng, nét 4 có gạch ngang dài làm mô hình nhầm sang 17."
+  },
+  {
+    "id": 514,
+    "llm_pred": 14,
+    "candidates": [
+      14,
+      17,
+      11
+    ],
+    "note": "Số bên phải là 4 có gạch ngang, mô hình nhầm với 17."
+  }
+]

@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thu Thập Dữ Liệu Khó - AI Hackathon</title>
+    <style>
+        body { font-family: sans-serif; display: flex; margin: 0; padding: 20px; background: #f0f2f5; }
+        .left-panel { flex: 1; padding-right: 20px; max-width: 600px; }
+        .right-panel { flex: 1; display: flex; flex-direction: column; align-items: center; }
+        canvas { border: 2px solid #333; cursor: crosshair; background: black; touch-action: none; }
+        .controls { margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 400px; }
+        .btn-label { padding: 10px 15px; font-size: 16px; cursor: pointer; border: 1px solid #ccc; background: white; border-radius: 5px; }
+        .btn-label.selected { background: #007bff; color: white; border-color: #0056b3; }
+        .actions { margin-top: 20px; display: flex; gap: 15px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; border: none; font-weight: bold; }
+        .btn-clear { background: #ff4d4d; color: white; }
+        .btn-save { background: #28a745; color: white; }
+        .btn-download { background: #17a2b8; color: white; margin-top: 20px; }
+        .stats { margin-top: 15px; font-size: 18px; font-weight: bold; color: #333; }
+        .guidelines { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1, h2, h3 { color: #333; margin-top: 0; }
+    </style>
+</head>
+<body>
+
+<div class="left-panel">
+    <div class="guidelines">
+        <h2>📚 Hướng Dẫn Viết Các Ca Khó</h2>
+        <p>Để đánh lừa/huấn luyện AI tốt hơn, hãy cố tình viết <strong>ẩu, dị dạng</strong> theo các trường hợp sau:</p>
+        
+        <h3>🔥 Cặp 13 vs 19 (Mục tiêu tối thượng)</h3>
+        <ul>
+            <li><strong>Viết 13:</strong> Viết số 3 mượt, vòng cung trên gập sát lại gần dính vào nhau (nhìn qua tưởng số 9).</li>
+            <li><strong>Viết 19:</strong> Số 9 bị trượt bút, hở toang phần đầu vòng tròn, hoặc hất đuôi lên giống số 3.</li>
+        </ul>
+
+        <h3>⚠️ Cặp 17 vs 19</h3>
+        <ul><li><strong>Viết 17:</strong> Số 7 cong đầu, có nét gạch ngang ở giữa (AI dễ nhìn nhầm thành bụng số 9).</li></ul>
+
+        <h3>⚠️ Cặp 15 vs 16</h3>
+        <ul><li><strong>Viết 15:</strong> Khoanh tròn vòng bụng dưới của số 5 khép kín lại y chang số 6.</li></ul>
+
+        <h3>⚠️ Cặp 16 vs 18</h3>
+        <ul>
+            <li><strong>Viết 16:</strong> Nét móc trên cùng cong gập xuống sát bụng.</li>
+            <li><strong>Viết 18:</strong> Viết số 8 nhưng hở toang vòng tròn phía trên.</li>
+        </ul>
+
+        <h3>⚠️ Cặp 10 vs 18</h3>
+        <ul><li><strong>Viết 10:</strong> Số 0 méo mó, ép sát vào số 1, mực chập vào nhau tạo thành hình thắt nơ.</li></ul>
+
+        <h3>⚠️ Cặp 12 vs 15</h3>
+        <ul><li><strong>Viết 12:</strong> Nét vòng trên quặp gắt xuống, nét ngang ở đáy uốn lượn cong lên.</li></ul>
+        
+        <p><em>Mẹo: Viết dính nét 2 số vào nhau (ví dụ ngang của 7 đè qua số 1) càng tốt!</em></p>
+    </div>
+</div>
+
+<div class="right-panel">
+    <h2>Vẽ Số Tại Đây</h2>
+    <canvas id="drawCanvas" width="280" height="280"></canvas>
+    
+    <div class="controls" id="labelControls">
+        <!-- Labels 10 to 20 -->
+    </div>
+
+    <div class="actions">
+        <button class="btn-clear" onclick="clearCanvas()">Xóa (Clear)</button>
+        <button class="btn-save" onclick="saveSample()">Lưu & Tiếp tục</button>
+    </div>
+
+    <div class="stats">Số mẫu đã thu thập: <span id="count">0</span></div>
+    
+    <button class="btn-download" onclick="downloadCSV()">Tải file CSV</button>
+</div>
+
+<script>
+    const canvas = document.getElementById('drawCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let selectedLabel = 13;
+    let collectedData = [];
+
+    // Initialize canvas
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 20; // 280px canvas -> 20px brush -> ~2px on 28x28
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    // Generate label buttons
+    const labelContainer = document.getElementById('labelControls');
+    for (let i = 10; i <= 20; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'btn-label' + (i === selectedLabel ? ' selected' : '');
+        btn.innerText = i;
+        btn.onclick = () => {
+            document.querySelectorAll('.btn-label').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedLabel = i;
+        };
+        labelContainer.appendChild(btn);
+    }
+
+    // Drawing logic
+    function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
+    function startDraw(e) {
+        e.preventDefault();
+        isDrawing = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+    }
+
+    function draw(e) {
+        e.preventDefault();
+        if (!isDrawing) return;
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    }
+
+    function stopDraw(e) {
+        e.preventDefault();
+        isDrawing = false;
+    }
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDraw);
+    canvas.addEventListener('mouseout', stopDraw);
+
+    canvas.addEventListener('touchstart', startDraw, {passive: false});
+    canvas.addEventListener('touchmove', draw, {passive: false});
+    canvas.addEventListener('touchend', stopDraw, {passive: false});
+
+    function clearCanvas() {
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function saveSample() {
+        // Downscale to 28x28
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = 28;
+        offCanvas.height = 28;
+        const offCtx = offCanvas.getContext('2d');
+        offCtx.drawImage(canvas, 0, 0, 28, 28);
+
+        const imgData = offCtx.getImageData(0, 0, 28, 28).data;
+        const pixels = [];
+        // Extract grayscale (R channel since it's black/white)
+        for (let i = 0; i < imgData.length; i += 4) {
+            pixels.push(imgData[i]);
+        }
+
+        collectedData.push({ label: selectedLabel, pixels: pixels });
+        document.getElementById('count').innerText = collectedData.length;
+        clearCanvas();
+    }
+
+    function downloadCSV() {
+        if (collectedData.length === 0) {
+            alert('Chưa có dữ liệu nào để tải!');
+            return;
+        }
+
+        let csvContent = 'label,writer,';
+        for (let i = 0; i < 784; i++) csvContent += 'pixel' + i + ',';
+        csvContent += 'time,strokes\n';
+
+        collectedData.forEach(item => {
+            let row = item.label + ',web_tool,';
+            row += item.pixels.join(',') + ',';
+            row += '0,1\n'; // dummy time and strokes
+            csvContent += row;
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 've_tay_hard_cases.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>

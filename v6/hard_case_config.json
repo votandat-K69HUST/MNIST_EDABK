@@ -1,0 +1,72 @@
+{
+    "name": "mlp_hard_case_specialist",
+    "seed": 42,
+    "num_threads": 8,
+    "data": {
+        "train": [
+            {
+                "path": "data/output/hard_cases_dataset.npz",
+                "weight": 1.0
+            },
+            {
+                "path": "data/output/v5_new_train.npz",
+                "weight": 0.3
+            },
+            {
+                "path": "data/_archive_v1/output/m04_ligature_strokes/train.npz",
+                "weight": 0.2
+            }
+        ],
+        "total_train": 0,
+        "val": {
+            "real": [
+                "data/output/v5_new_val.npz"
+            ]
+        }
+    },
+    "augment": {
+        "enabled": true,
+        "rotate": 10,
+        "shear": 12,
+        "shift": 3,
+        "noise_std": 0.05,
+        "thickness_p": 0.5
+    },
+    "model": {
+        "hidden": [
+            512,
+            512,
+            256
+        ],
+        "dropout": 0.35,
+        "activation": "gelu",
+        "batchnorm": true,
+        "input_dropout": 0.0
+    },
+    "train": {
+        "epochs": 30,
+        "batch_size": 128,
+        "optimizer": "adamw",
+        "lr": 0.001,
+        "weight_decay": 1e-4,
+        "scheduler": "cosine",
+        "warmup_epochs": 2,
+        "min_lr_frac": 0.01,
+        "label_smoothing": 0.05,
+        "grad_clip": 1.0,
+        "patience": 8
+    },
+    "ensemble": {
+        "seeds": [
+            0,
+            1,
+            2
+        ]
+    },
+    "predict": {
+        "test_csv": "test.csv",
+        "output": "v6/submission_hard_case.csv",
+        "tta_shifts": 2
+    },
+    "base_dir": "D:\\2025\\2025.2\\LAB\\AI_ML\\Week_11\\AI_HACKATHON"
+}

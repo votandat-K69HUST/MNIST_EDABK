@@ -12,12 +12,15 @@ python tools/preview.py output/m03_qmnist_same_writer/train.npz   # xem lưới 
 ```
 Từng bộ: `cd 01_mnist_random_concat && python generate.py [--n-train N --n-val N --seed S --workers W]`.
 
-## Hai phương pháp
+## Các phương pháp sinh dữ liệu
 | Thư mục | Ý tưởng | Nguồn | Chia train/val |
 |---|---|---|---|
 | `01_mnist_random_concat` | Hai chữ bốc ngẫu nhiên (phong cách không đồng nhất) | MNIST (70k) | theo ảnh |
+| `02_mnist_style_matched` | Ghép hai chữ khớp phong cách nét | MNIST (70k) | theo cụm |
 | `03_qmnist_same_writer` | Hai chữ **cùng một người viết** (ý tưởng bài MDW, arXiv 2512.00676) | QMNIST (1074 writer) | theo **writer** |
-| `05_self_handwritten` | Công cụ tự viết tay → tập val thật / chữ số của riêng bạn | bạn tự viết | theo người viết |
+| `04_ligature_strokes` | Cùng người viết + **nét nối (ligature)** mờ ở giữa (xem `m04_report.md`) | QMNIST (1074 writer) | theo **writer** |
+| `05_self_handwritten` | Dữ liệu tự viết tay thực tế | Bạn tự viết | theo writer |
+| `06_augmentation` | Tăng cường hình học trên dữ liệu ghép | m01 - m05 | kế thừa |
 
 Nhãn 10–19 = chữ "1" + chữ d; nhãn 20 = "2" + "0". Nhãn cân bằng 11 lớp.
 

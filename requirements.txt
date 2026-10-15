@@ -1,0 +1,6 @@
+# Core dependencies for AI Hackathon - Handwritten Number Recognition (10-20)
+torch>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+pillow>=9.1.0
+pandas>=1.5.0
