@@ -22,7 +22,7 @@
           "weight": 0.5
         }
       ],
-      "total_train": 0,
+      "total_train": 2000,
       "val": {
         "synthetic": [
           "../data/_archive_v1/output/m04_ligature_strokes/val.npz",
@@ -52,7 +52,7 @@
       "input_dropout": 0.0
     },
     "train": {
-      "epochs": 30,
+      "epochs": 2,
       "batch_size": 256,
       "optimizer": "adamw",
       "lr": 0.001,
@@ -80,39 +80,15 @@
   "results": [
     {
       "seed": 0,
-      "best_epoch": 19,
-      "score": 0.9242053789731052,
+      "best_epoch": 2,
+      "score": 0.3080684596577017,
       "val": {
-        "synthetic:m04_ligature_strokes/val.npz": 0.9710909090909091,
-        "synthetic:m03_qmnist_same_writer/val.npz": 0.9827272727272728,
-        "real:output/self_numbers_val.npz": 0.9242053789731052
+        "synthetic:m04_ligature_strokes/val.npz": 0.4616363636363636,
+        "synthetic:m03_qmnist_same_writer/val.npz": 0.4309090909090909,
+        "real:output/self_numbers_val.npz": 0.3080684596577017
       },
       "params": 537611,
       "path": "D:\\2025\\2025.2\\LAB\\AI_ML\\Week_11\\AI_HACKATHON\\model\\runs\\mlp_v3_combined\\model_seed0.pt"
-    },
-    {
-      "seed": 1,
-      "best_epoch": 22,
-      "score": 0.921760391198044,
-      "val": {
-        "synthetic:m04_ligature_strokes/val.npz": 0.974,
-        "synthetic:m03_qmnist_same_writer/val.npz": 0.982,
-        "real:output/self_numbers_val.npz": 0.921760391198044
-      },
-      "params": 537611,
-      "path": "D:\\2025\\2025.2\\LAB\\AI_ML\\Week_11\\AI_HACKATHON\\model\\runs\\mlp_v3_combined\\model_seed1.pt"
-    },
-    {
-      "seed": 2,
-      "best_epoch": 20,
-      "score": 0.9266503667481663,
-      "val": {
-        "synthetic:m04_ligature_strokes/val.npz": 0.9694545454545455,
-        "synthetic:m03_qmnist_same_writer/val.npz": 0.9812727272727273,
-        "real:output/self_numbers_val.npz": 0.9266503667481663
-      },
-      "params": 537611,
-      "path": "D:\\2025\\2025.2\\LAB\\AI_ML\\Week_11\\AI_HACKATHON\\model\\runs\\mlp_v3_combined\\model_seed2.pt"
     }
   ]
 }

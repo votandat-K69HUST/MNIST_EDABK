@@ -34,20 +34,22 @@ def load_models(paths):
 
 
 @torch.no_grad()
-def predict_proba(models, X, tta_shifts=0, bs=2048):
+def predict_proba(models, X, tta_shifts=0, bs=2048, device=None):
     """X: (N,28,28) float 0..1. Tra ve xac suat trung binh (N,11) cua cac model (+ TTA dich +-tta_shifts px)."""
+    dev = device or (torch.device("cuda" if torch.cuda.is_available() else "cpu"))
     shifts = [(0, 0)]
     if tta_shifts > 0:
         s = tta_shifts
         shifts += [(s, 0), (-s, 0), (0, s), (0, -s)]
     out = torch.zeros(len(X), 11)
+    models = [m.to(dev).eval() for m in models]
     for m in models:
         for dy, dx in shifts:
             for i in range(0, len(X), bs):
-                xb = X[i:i + bs]
+                xb = X[i:i + bs].to(dev)
                 if dy or dx:
                     xb = torch.roll(xb, shifts=(dy, dx), dims=(1, 2))
-                out[i:i + bs] += torch.softmax(m(xb), dim=1)
+                out[i:i + bs] += torch.softmax(m(xb), dim=1).cpu()
     return out / (len(models) * len(shifts))
 
 

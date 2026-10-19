@@ -21,7 +21,7 @@
         "weight": 0.5
       }
     ],
-    "total_train": 0,
+    "total_train": 2000,
     "val": {
       "synthetic": [
         "../data/_archive_v1/output/m04_ligature_strokes/val.npz",
@@ -51,7 +51,7 @@
     "input_dropout": 0.0
   },
   "train": {
-    "epochs": 30,
+    "epochs": 2,
     "batch_size": 256,
     "optimizer": "adamw",
     "lr": 0.001,

@@ -49,11 +49,14 @@ def apply_overrides(cfg, items):
 
 
 @torch.no_grad()
-def accuracy(model, X, y, bs=4096):
+def accuracy(model, X, y, bs=4096, device=None):
     model.eval()
+    dev = device or next(model.parameters()).device
     correct = 0
     for i in range(0, len(X), bs):
-        correct += (model(X[i:i + bs]).argmax(1) == y[i:i + bs]).sum().item()
+        xb = X[i:i + bs].to(dev)
+        yb = y[i:i + bs].to(dev)
+        correct += (model(xb).argmax(1) == yb).sum().item()
     return correct / len(X)
 
 
@@ -66,9 +69,13 @@ def primary_score(accs):
 
 
 def train_one(cfg, seed, out_dir, base, verbose=True, data_cache=None):
+    device = torch.device(cfg.get("device") or ("cuda" if torch.cuda.is_available() else "cpu"))
     torch.manual_seed(seed)
     np.random.seed(seed)
-    torch.set_num_threads(cfg.get("num_threads", torch.get_num_threads()))
+    if device.type == "cuda":
+        torch.cuda.manual_seed_all(seed)
+    else:
+        torch.set_num_threads(cfg.get("num_threads", torch.get_num_threads()))
     tcfg = cfg["train"]
 
     if data_cache is None:
@@ -79,10 +86,10 @@ def train_one(cfg, seed, out_dir, base, verbose=True, data_cache=None):
     Xt = to_tensor(Xtr)
     yt = torch.from_numpy(ytr - LABEL_OFFSET).long()
     if verbose:
-        print(f"[seed {seed}] train {len(Xt)} mau tu {desc}; val: {list(val)}")
+        print(f"[seed {seed}] [{device.type.upper()}] train {len(Xt)} mau tu {desc}; val: {list(val)}")
 
     mean, std = Xt.mean().item(), Xt.std().item()
-    model = build_model(cfg["model"], mean, std)
+    model = build_model(cfg["model"], mean, std).to(device)
     n_params = sum(p.numel() for p in model.parameters())
 
     params = model.parameters()
@@ -107,20 +114,20 @@ def train_one(cfg, seed, out_dir, base, verbose=True, data_cache=None):
 
     sched = torch.optim.lr_scheduler.LambdaLR(opt, lr_lambda)
     loss_fn = nn.CrossEntropyLoss(label_smoothing=tcfg.get("label_smoothing", 0.0))
-    g = torch.Generator().manual_seed(seed)
+    g = torch.Generator(device=device).manual_seed(seed)
     best, best_state, best_ep, bad = -1.0, None, -1, 0
     hist = []
     os.makedirs(out_dir, exist_ok=True)
     t0 = time.time()
     for ep in range(epochs):
         model.train()
-        perm = torch.randperm(len(Xt), generator=g)
+        perm = torch.randperm(len(Xt))
         tot_loss, n = 0.0, 0
         for i in range(0, len(Xt), bs):
             idx = perm[i:i + bs]
             if len(idx) < 2:
                 continue
-            xb, yb = Xt[idx], yt[idx]
+            xb, yb = Xt[idx].to(device), yt[idx].to(device)
             xb = augment(xb, cfg.get("augment"), g)
             opt.zero_grad(set_to_none=True)
             loss = loss_fn(model(xb), yb)
@@ -131,7 +138,7 @@ def train_one(cfg, seed, out_dir, base, verbose=True, data_cache=None):
             sched.step()
             tot_loss += loss.item() * len(idx)
             n += len(idx)
-        accs = {k: accuracy(model, X, y) for k, (X, y) in val.items()}
+        accs = {k: accuracy(model, X, y, device=device) for k, (X, y) in val.items()}
         score = primary_score(accs)
         hist.append({"epoch": ep + 1, "loss": tot_loss / n, "score": score, "lr": opt.param_groups[0]["lr"], **accs})
         if verbose:
@@ -140,7 +147,7 @@ def train_one(cfg, seed, out_dir, base, verbose=True, data_cache=None):
                   f" ({time.time() - t0:.0f}s)")
         if score > best:
             best, best_ep, bad = score, ep + 1, 0
-            best_state = copy.deepcopy(model.state_dict())
+            best_state = {k: v.cpu().clone() for k, v in model.state_dict().items()}
         else:
             bad += 1
             if tcfg.get("patience") and bad >= tcfg["patience"]:
@@ -148,9 +155,9 @@ def train_one(cfg, seed, out_dir, base, verbose=True, data_cache=None):
                     print(f"  early stop (khong cai thien {bad} epoch)")
                 break
     if not val:  # khong co val: lay model cuoi
-        best_state, best_ep = copy.deepcopy(model.state_dict()), len(hist)
+        best_state, best_ep = {k: v.cpu().clone() for k, v in model.state_dict().items()}, len(hist)
     model.load_state_dict(best_state)
-    final_accs = {k: accuracy(model, X, y) for k, (X, y) in val.items()}
+    final_accs = {k: accuracy(model, X, y, device=device) for k, (X, y) in val.items()}
     path = os.path.join(out_dir, f"model_seed{seed}.pt")
     torch.save({"state_dict": best_state, "config": cfg, "mean": mean, "std": std, "seed": seed,
                 "best_epoch": best_ep, "val": final_accs}, path)

@@ -144,7 +144,6 @@ AI_HACKATHON/
 ├── guide.md                       # Tài liệu hướng dẫn này
 ├── requirements.txt               # Danh sách thư viện Python cần thiết
 ├── test.csv                       # Dữ liệu test của cuộc thi (550 mẫu)
-├── eval_against_gemini.py         # Công cụ tự động chấm điểm với Ground Truth
 │
 ├── data/                          # Toàn bộ mã nguồn và dữ liệu
 │   ├── 01_mnist_random_concat/    # Ghép 2 số ngẫu nhiên từ MNIST
@@ -169,7 +168,10 @@ AI_HACKATHON/
 ├── v1/ ... v7/                    # Lưu trữ các mốc thử nghiệm lịch sử, báo cáo và output
 │   ├── v4/submission_v4_new.csv   # File nộp kỷ lục 0.96818 Kaggle
 │   └── v7/submission_v7_blend.csv # File nộp kỷ lục 98.18% Ground Truth
-└── test_label_by_GEMINI/          # File đáp án test_labeled.csv (chỉ dùng để chấm offline)
+└── test_label_by_GEMINI/          # Bộ Ground Truth & công cụ chấm đối chứng offline
+    ├── test_labeled.csv           # Đáp án chuẩn 550 mẫu
+    ├── eval_against_gemini.py     # Công cụ tự động chấm điểm với Ground Truth
+    └── gemini_labeling_report.md  # Báo cáo kỹ thuật chi tiết quy trình gán nhãn
 ```
 
 ---

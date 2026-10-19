@@ -3,7 +3,9 @@ import os
 import pandas as pd
 import numpy as np
 
-GT_PATH = r"D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\test_label_by_GEMINI\test_labeled.csv"
+CUR_DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_GT = os.path.join(CUR_DIR, "test_labeled.csv")
+GT_PATH = DEFAULT_GT if os.path.exists(DEFAULT_GT) else r"D:\2025\2025.2\LAB\AI_ML\Week_11\AI_HACKATHON\test_label_by_GEMINI\test_labeled.csv"
 
 def evaluate_submission(sub_path, gt_path=GT_PATH):
     if not os.path.exists(sub_path):
